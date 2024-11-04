@@ -1,0 +1,322 @@
+<div class="canvas-container">
+  <svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid meet">
+    <!-- 渐变定义 -->
+    <defs>
+      <!-- 叶子渐变 -->
+      <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#68c357"/>
+        <stop offset="50%" style="stop-color:#4da83d"/>
+        <stop offset="100%" style="stop-color:#3d8a30"/>
+      </linearGradient>
+      
+      <!-- 水珠渐变 -->
+      <radialGradient id="dropGradient" cx="35%" cy="35%" r="60%">
+        <stop offset="0%" style="stop-color:rgba(255,255,255,0.95)"/>
+        <stop offset="40%" style="stop-color:rgba(255,255,255,0.85)"/>
+        <stop offset="100%" style="stop-color:rgba(255,255,255,0.7)"/>
+      </radialGradient>
+      
+      <!-- 添加内部阴影效果 -->
+      <filter id="innerShadow">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"/>
+        <feOffset dx="0.5" dy="0.5"/>
+        <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      </filter>
+      
+      <!-- 改进光效果 -->
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="1" result="blur"/>
+        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+      </filter>
+
+      <!-- 将水珠模板移到 defs 中 -->
+      <g id="dewdrop" class="dewdrop">
+        <ellipse cx="1" cy="1" rx="12" ry="3" 
+                 fill="rgba(0,0,0,0.15)" 
+                 filter="feGaussianBlur(1)"/>
+        <ellipse rx="12" ry="11" 
+                fill="url(#dropGradient)"
+                filter="url(#glow)"
+                style="filter: url(#innerShadow)"/>
+        <ellipse class="highlight" cx="-4" cy="-3" rx="4" ry="3.5" 
+                fill="rgba(255,255,255,0.9)"/>
+        <ellipse class="secondary-highlight" cx="4" cy="4" rx="2.5" ry="2" 
+                fill="rgba(255,255,255,0.4)"/>
+        <circle class="sparkle" cx="5" cy="-4" r="1" 
+                fill="white"/>
+        <ellipse cx="0" cy="0" rx="11.5" ry="10.5" 
+                fill="none" 
+                stroke="rgba(255,255,255,0.3)" 
+                stroke-width="0.5"/>
+      </g>
+    </defs>
+
+    <!-- 创建叶片模板 -->
+    <defs>
+      <!-- 修改叶片模板，移除固定的水珠 -->
+      <g id="leaf-with-dew">
+        <!-- 叶子 -->
+        <path d="M50,100 
+                 C100,70 150,60 250,100 
+                 C150,140 100,130 50,100 
+                 Z" 
+              fill="url(#leafGradient)" 
+              stroke="#2d6624"
+              stroke-width="0.5"
+              filter="drop-shadow(2px 4px 6px rgba(0,0,0,0.3))"/>
+      </g>
+
+      <!-- 在 defs 部分添加一个新的叶片模板用于飘落 -->
+      <g id="falling-leaf">
+        <path d="M25,50 
+                 C50,35 75,30 125,50 
+                 C75,70 50,65 25,50 
+                 Z" 
+              fill="url(#leafGradient)" 
+              stroke="#2d6624"
+              stroke-width="0.5"
+              transform="scale(0.5)"/>
+      </g>
+    </defs>
+
+    <!-- 使用叶片模板创建多片叶子 -->
+    <use href="#leaf-with-dew" transform="translate(0, 0) rotate(0)"/>
+    <use href="#leaf-with-dew" transform="translate(-20, 80) rotate(-15) scale(0.8)"/>
+    <use href="#leaf-with-dew" transform="translate(40, 50) rotate(10) scale(0.9)"/>
+    <use href="#leaf-with-dew" transform="translate(-10, -30) rotate(-5) scale(0.7)"/>
+  </svg>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    createRandomLeaves();
+    startFallingLeaves();
+  });
+
+  function randomBetween(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createRandomLeaves() {
+    // 移除现有的叶子
+    document.querySelectorAll('use[href="#leaf-with-dew"], use[href="#dewdrop"]').forEach(el => el.remove());
+    
+    // 随机生成 3-6 片叶子
+    const leafCount = Math.floor(randomBetween(3, 7));
+    
+    for (let i = 0; i < leafCount; i++) {
+      const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+      use.setAttribute("href", "#leaf-with-dew");
+      
+      // 随机位置、旋转和大小
+      const x = randomBetween(0, 250);
+      const y = randomBetween(0, 150);
+      const rotation = randomBetween(-20, 20);
+      const scale = randomBetween(0.6, 1);
+      
+      use.setAttribute('transform', 
+        `translate(${x}, ${y}) rotate(${rotation}) scale(${scale})`);
+      
+      document.querySelector('svg').appendChild(use);
+      
+      // 为每片叶子添加 2-4 个随机位置的水珠
+      const dewCount = Math.floor(randomBetween(2, 5));
+      for (let j = 0; j < dewCount; j++) {
+        const dewdrop = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        dewdrop.setAttribute("href", "#dewdrop");
+        
+        // 在叶子范围内随机放置水珠
+        const dewX = randomBetween(60, 180);
+        const dewY = randomBetween(90, 110);
+        const dewScale = randomBetween(0.3, 0.6);
+        
+        dewdrop.setAttribute('transform', 
+          `translate(${x}, ${y}) rotate(${rotation}) scale(${scale}) ` +
+          `translate(${dewX}, ${dewY}) scale(${dewScale})`);
+        
+        document.querySelector('svg').appendChild(dewdrop);
+      }
+    }
+  }
+
+  // 点击时重新生成叶子
+  document.addEventListener('click', createRandomLeaves);
+
+  // 在 script 标签中添加飘落叶片的函数
+  function createFallingLeaf() {
+    // 直接在SVG中创建飘落的叶片
+    const leaf = document.createElementNS("http://www.w3.org/2000/svg", "use");
+    leaf.setAttribute("href", "#falling-leaf");
+    leaf.classList.add("falling-leaf");
+    
+    // 随机设置叶片的起始位置
+    const startX = randomBetween(50, 250);  // 在SVG viewBox范围内
+    const startY = -20;  // 从画布顶部稍微上方开始
+    
+    // 设置初始位置和动画
+    const duration = 4 + Math.random() * 3; // 缩短动画时间
+    leaf.style.animation = `fallInSvg ${duration}s linear forwards`;
+    
+    // 设置初始transform
+    leaf.setAttribute('transform', `translate(${startX}, ${startY})`);
+    
+    // 将叶片添加到SVG中
+    document.querySelector('svg').appendChild(leaf);
+    
+    // 动画结束后移除叶片
+    leaf.addEventListener('animationend', () => leaf.remove());
+  }
+
+  function startFallingLeaves() {
+    // 每隔2-4秒创建一片新的落叶
+    setInterval(() => {
+      createFallingLeaf();
+    }, 2000 + Math.random() * 2000);
+  }
+</script>
+
+<style>
+  .dewdrop {
+    animation: wobble 3s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+
+  .highlight {
+    animation: shimmer 4s ease-in-out infinite;
+    transform-origin: center center;
+  }
+
+  .secondary-highlight {
+    animation: shimmer 4s ease-in-out infinite reverse;
+  }
+
+  .sparkle {
+    animation: twinkle 2s ease-in-out infinite;
+  }
+
+  @keyframes wobble {
+    0%, 100% { 
+      transform: scale(1) scaleY(1); 
+    }
+    50% { 
+      transform: scale(0.995) scaleY(0.99);
+    }
+  }
+
+  @keyframes shimmer {
+    0%, 100% { 
+      opacity: 0.9;
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 0.7;
+      transform: scale(0.98);
+    }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { 
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 0.6;
+      transform: scale(0.8);
+    }
+  }
+
+  .dewdrop-small {
+    animation: wobble 2.5s ease-in-out infinite;
+  }
+
+  .dewdrop-tiny {
+    animation: wobble 2s ease-in-out infinite;
+  }
+
+  /* 添加过渡效果使位置变化更平滑 */
+  g {
+    transition: transform 0.5s ease-out;
+  }
+
+  .canvas-container {
+    width: min(90vw, 600px);  /* 最大宽度600px，但不超过视口宽度的90% */
+    height: min(60vw, 400px); /* 保持宽高比约为3:2 */
+    margin: 20px auto;        /* 居中显示 */
+    padding: 0;
+    background: #f0f7f0;
+    border: 1px solid #d0e0d0;
+    box-shadow: 
+      0 0 0 1px #e6f0e6,
+      2px 2px 10px rgba(0,0,0,0.1),
+      inset 0 0 80px rgba(0,100,0,0.03);
+    border-radius: 4px;       /* 略微增加圆角 */
+    display: block;           /* 改为 block 布局 */
+    position: relative;
+  }
+
+  /* 添加媒体查询以优化移动端显示 */
+  @media (max-width: 480px) {
+    .canvas-container {
+      width: 95vw;           /* 在小屏幕上占据更多宽度 */
+      height: 63.33vw;       /* 保持3:2的宽高比 */
+      margin: 10px auto;     /* 减小边距 */
+    }
+  }
+
+  /* 确保 SVG 完全填充容器 */
+  .canvas-container svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    z-index: 2;
+  }
+
+  .canvas-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      linear-gradient(45deg, transparent 48%, #e8f3e8 49%, #fff 51%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, #e8f3e8 49%, #fff 51%, transparent 52%);
+    background-size: 30px 30px;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .canvas-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/png;base64,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');
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* 在 style 标签中添加飘落动画 */
+  @keyframes fallInSvg {
+    0% {
+      transform: translate(var(--start-x, 0), -20px) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--start-x, 0), 220px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .falling-leaf {
+    animation: none; /* 移除之前的动画 */
+  }
+</style>
