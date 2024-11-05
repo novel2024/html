@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>银杏叶飘落动画</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            /* 使用渐变创建更生动的天空背景 */
+            background: linear-gradient(
+                180deg,
+                #1a4b8c 0%,     /* 深蓝色顶部 */
+                #4b7fd1 30%,    /* 渐变到中蓝色 */
+                #87CEEB 70%,    /* 渐变到天蓝色 */
+                #b4e1ff 100%    /* 底部偏白的天蓝色 */
+            );
+            min-height: 100vh;  /* 确保背景填满整个视口高度 */
+        }
+        
+        .leaf {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background: url('images/ginkgo.png') no-repeat;
+            background-size: contain;
+            animation: falling 10s linear infinite;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translate(0, -10%) rotate(0deg) scaleY(1);
+                opacity: 1;
+            }
+            15% {
+                transform: translate(50px, 150%) rotate(45deg) scaleY(0.3);  /* 压扁效果 */
+                opacity: 0.95;
+            }
+            25% {
+                transform: translate(100px, 250%) rotate(90deg) scaleY(1);  /* 恢复原状 */
+                opacity: 0.9;
+            }
+            40% {
+                transform: translate(0px, 400%) rotate(135deg) scaleY(0.2);  /* 再次压扁 */
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(-50px, 500%) rotate(180deg) scaleY(1);
+                opacity: 0.7;
+            }
+            65% {
+                transform: translate(-25px, 650%) rotate(225deg) scaleY(0.4);  /* 第三次压扁 */
+                opacity: 0.6;
+            }
+            75% {
+                transform: translate(50px, 750%) rotate(270deg) scaleY(1);
+                opacity: 0.5;
+            }
+            90% {
+                transform: translate(25px, 900%) rotate(325deg) scaleY(0.3);  /* 最后一次压扁 */
+                opacity: 0.4;
+            }
+            100% {
+                transform: translate(0, 1000%) rotate(360deg) scaleY(1);
+                opacity: 0.3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 添加最大叶子数量的控制
+        const MAX_LEAVES = 15;  // 设置最大叶子数量
+
+        function createLeaf() {
+            // 检查当前叶子数量
+            const currentLeaves = document.getElementsByClassName('leaf').length;
+            if (currentLeaves >= MAX_LEAVES) {
+                return;  // 如果超过最大数量，不再创建新叶子
+            }
+
+            const leaf = document.createElement('div');
+            leaf.className = 'leaf';
+            // 随机生成叶子的起始位置
+            leaf.style.left = Math.random() * 100 + '%';
+            // 随机生成动画持续时间
+            leaf.style.animationDuration = Math.random() * 10 + 5 + 's';
+            document.body.appendChild(leaf);
+            
+            // 动画结束后移除叶子元素
+            leaf.addEventListener('animationend', () => {
+                leaf.remove();
+            });
+        }
+
+        // 降低创建叶子的频率
+        setInterval(createLeaf, 2000);  // 改为每2秒创建一片叶子
+        
+        // 减少初始叶子数量
+        for(let i = 0; i < 5; i++) {  // 改为初始创建5片叶子
+            createLeaf();
+        }
+    </script>
+</body>
+</html>
