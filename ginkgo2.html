@@ -18,88 +18,388 @@
             min-height: 100vh;  /* 确保背景填满整个视口高度 */
         }
         
+        /* 添加湖水效果 */
+        .lake {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 30vh;  /* 湖水占视口高度的30% */
+            background: linear-gradient(
+                180deg,
+                rgba(176, 224, 230, 0.2) 0%,    /* 降低顶部透明度 */
+                rgba(70, 130, 180, 0.3) 100%    /* 降低底部透明度 */
+            );
+            backdrop-filter: blur(2px);
+            /* 添加波纹动画 */
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                height: 100%;
+                background-image: 
+                    linear-gradient(
+                        90deg,
+                        transparent 0%,
+                        rgba(255, 255, 255, 0.1) 50%,
+                        transparent 100%
+                    );
+                background-size: 200% 100%;
+            }
+            
+            &::before {
+                animation: wave 8s linear infinite;
+                opacity: 0.5;
+            }
+            
+            &::after {
+                animation: wave 12s linear infinite reverse;
+                opacity: 0.3;
+            }
+        }
+        
+        /* 添加波纹动画关键帧 */
+        @keyframes wave {
+            0% { background-position: 0% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* 添加水面反光效果 */
+        .lake-reflection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(
+                0deg,
+                transparent,
+                rgba(255, 255, 255, 0.05) 20%,
+                rgba(255, 255, 255, 0.02) 40%,
+                transparent 100%
+            );
+            animation: shimmer 3s ease-in-out infinite alternate;
+        }
+        
         .leaf {
             position: fixed;
             width: 40px;
             height: 40px;
             background: url('images/ginkgo.png') no-repeat;
             background-size: contain;
-            animation: falling 10s linear infinite;
+            animation: falling 10s linear forwards;
+            z-index: 1;  /* 确保叶子在湖面上层 */
         }
 
         @keyframes falling {
             0% {
-                transform: translate(0, -10%) rotate(0deg) scaleY(1);
+                transform: translate(0, -10%) rotate(0deg) scale(1);
                 opacity: 1;
             }
-            15% {
-                transform: translate(50px, 150%) rotate(45deg) scaleY(0.3);  /* 压扁效果 */
-                opacity: 0.95;
-            }
             25% {
-                transform: translate(100px, 250%) rotate(90deg) scaleY(1);  /* 恢复原状 */
-                opacity: 0.9;
+                transform: translate(20px, 20vh) rotate(90deg) scaleX(0.5);
+                opacity: 1;
             }
-            40% {
-                transform: translate(0px, 400%) rotate(135deg) scaleY(0.2);  /* 再次压扁 */
-                opacity: 0.8;
+            37.5% {
+                transform: translate(28px, 32vh) rotate(135deg) scale(1);
+                opacity: 1;
             }
             50% {
-                transform: translate(-50px, 500%) rotate(180deg) scaleY(1);
-                opacity: 0.7;
+                transform: translate(35px, 45vh) rotate(180deg) scaleX(0.5);
+                opacity: 1;
             }
-            65% {
-                transform: translate(-25px, 650%) rotate(225deg) scaleY(0.4);  /* 第三次压扁 */
-                opacity: 0.6;
+            62.5% {
+                transform: translate(40px, 55vh) rotate(225deg) scale(1);
+                opacity: 1;
+            }
+            70% {
+                transform: translate(50px, 70vh) rotate(270deg) scaleX(0.2);
+                opacity: 1;
             }
             75% {
-                transform: translate(50px, 750%) rotate(270deg) scaleY(1);
-                opacity: 0.5;
+                transform: translate(50px, 70vh) rotate(270deg) scaleX(0.2);
+                opacity: 1;
             }
-            90% {
-                transform: translate(25px, 900%) rotate(325deg) scaleY(0.3);  /* 最后一次压扁 */
-                opacity: 0.4;
+            85% {
+                transform: translate(25px, 70vh) rotate(290deg) scaleX(0.2);
+                opacity: 1;
             }
             100% {
-                transform: translate(0, 1000%) rotate(360deg) scaleY(1);
-                opacity: 0.3;
+                transform: translate(75px, 70vh) rotate(310deg) scaleX(0.2) scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        /* 添加水下物体样式 */
+        .underwater-objects {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .seaweed {
+            position: absolute;
+            bottom: -10px;
+            width: 20px;
+            height: 80px;
+            /* 添加更自然的水草颜色渐变 */
+            background: linear-gradient(180deg, 
+                rgba(0, 120, 0, 0.2) 0%,
+                rgba(34, 139, 34, 0.3) 50%,
+                rgba(0, 100, 0, 0.25) 100%);
+            border-radius: 40% 60% 60% 40% / 25% 25% 75% 75%;  /* 更自然的形状 */
+            transform-origin: bottom center;
+            animation: sway 4s ease-in-out infinite alternate;
+            /* 添加轻微的模糊效果 */
+            filter: blur(0.5px);
+        }
+
+        /* 添加新的水草变体 */
+        .seaweed.variant-1 {
+            background: linear-gradient(180deg, 
+                rgba(0, 130, 0, 0.2) 0%,
+                rgba(50, 150, 50, 0.3) 50%,
+                rgba(0, 110, 0, 0.25) 100%);
+            border-radius: 60% 40% 50% 50% / 30% 30% 70% 70%;
+            filter: blur(0.7px);
+        }
+
+        .seaweed.variant-2 {
+            background: linear-gradient(180deg, 
+                rgba(0, 110, 0, 0.2) 0%,
+                rgba(30, 130, 30, 0.3) 50%,
+                rgba(0, 90, 0, 0.25) 100%);
+            border-radius: 45% 55% 45% 55% / 20% 20% 80% 80%;
+            filter: blur(0.3px);
+        }
+
+        .rock {
+            position: absolute;
+            bottom: 5px;
+            background: linear-gradient(
+                to bottom,
+                #808080 0%,    /* 浅灰色顶部 */
+                #4a4a4a 60%,   /* 深灰色主体 */
+                #363636 100%   /* 更深的底部 */
+            );
+            border-radius: 50% 30% 40% 45%;
+            box-shadow: 
+                inset -2px -2px 4px rgba(0, 0, 0, 0.3),  /* 内阴影增加立体感 */
+                2px 2px 4px rgba(0, 0, 0, 0.2);          /* 外阴影增加深度 */
+        }
+
+        @keyframes sway {
+            0% { 
+                transform: rotate(-8deg) scaleX(0.9); 
+                filter: brightness(0.95);
+            }
+            50% {
+                transform: rotate(0deg) scaleX(1);
+                filter: brightness(1);
+            }
+            100% { 
+                transform: rotate(8deg) scaleX(0.9);
+                filter: brightness(0.95);
             }
         }
     </style>
 </head>
 <body>
+    <!-- 添加湖水元素 -->
+    <div class="lake">
+        <div class="lake-reflection"></div>
+        <!-- 添加水下物体容器 -->
+        <div class="underwater-objects">
+            <!-- 水草和石头将通过JavaScript动态生成 -->
+        </div>
+    </div>
+    
     <script>
-        // 添加最大叶子数量的控制
-        const MAX_LEAVES = 15;  // 设置最大叶子数量
+        // 修改最大叶子数量
+        const MAX_LEAVES = 500;  // 增加允许的最大叶子数量
+
+        function createUnderwaterObjects() {
+            const container = document.querySelector('.underwater-objects');
+            
+            // 添加水草
+            for(let i = 0; i < 12; i++) {
+                const seaweed = document.createElement('div');
+                seaweed.className = 'seaweed';
+                
+                // 随机添加变体类
+                const variant = Math.floor(Math.random() * 3);  // 0, 1, or 2
+                if (variant > 0) {
+                    seaweed.classList.add(`variant-${variant}`);
+                }
+                
+                seaweed.style.left = `${Math.random() * 100}%`;
+                // 更多随机的高度变化
+                seaweed.style.height = `${30 + Math.random() * 70}px`;
+                // 随机的宽度变化
+                seaweed.style.width = `${15 + Math.random() * 10}px`;
+                // 随机动画延迟和持续时间
+                seaweed.style.animationDelay = `${Math.random() * 2}s`;
+                seaweed.style.animationDuration = `${3 + Math.random() * 3}s`;
+                
+                container.appendChild(seaweed);
+            }
+            
+            // 添加更多样化的石头
+            for(let i = 0; i < 8; i++) {
+                const rock = document.createElement('div');
+                rock.className = 'rock';
+                rock.style.left = `${Math.random() * 100}%`;
+                
+                // 随机大小
+                const size = 20 + Math.random() * 30;
+                rock.style.width = `${size}px`;
+                rock.style.height = `${size * (0.6 + Math.random() * 0.4)}px`;
+                
+                // 修改这里：将石头放在底部，并稍微埋入一点
+                rock.style.bottom = `-${Math.random() * 5}px`;  // 随机埋入0-5px
+                
+                // 随机旋转
+                rock.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                // 随机形状（通过调整border-radius）
+                const r1 = 20 + Math.random() * 50;
+                const r2 = 20 + Math.random() * 50;
+                const r3 = 20 + Math.random() * 50;
+                const r4 = 20 + Math.random() * 50;
+                rock.style.borderRadius = `${r1}% ${r2}% ${r3}% ${r4}%`;
+                
+                // 随机颜色变化（在灰色范围内）
+                const colorOffset = -20 + Math.random() * 40; // -20到+20的随机偏移
+                rock.style.background = `linear-gradient(
+                    to bottom,
+                    rgb(${128 + colorOffset}, ${128 + colorOffset}, ${128 + colorOffset}) 0%,
+                    rgb(${74 + colorOffset}, ${74 + colorOffset}, ${74 + colorOffset}) 60%,
+                    rgb(${54 + colorOffset}, ${54 + colorOffset}, ${54 + colorOffset}) 100%
+                )`;
+                
+                container.appendChild(rock);
+            }
+        }
 
         function createLeaf() {
-            // 检查当前叶子数量
             const currentLeaves = document.getElementsByClassName('leaf').length;
             if (currentLeaves >= MAX_LEAVES) {
-                return;  // 如果超过最大数量，不再创建新叶子
+                return;
             }
 
             const leaf = document.createElement('div');
             leaf.className = 'leaf';
-            // 随机生成叶子的起始位置
-            leaf.style.left = Math.random() * 100 + '%';
-            // 随机生成动画持续时间
-            leaf.style.animationDuration = Math.random() * 10 + 5 + 's';
+            
+            // 添加数据属性来追踪叶子
+            leaf.dataset.id = Date.now();
+            console.log(`Created leaf ${leaf.dataset.id}`);
+            
+            const size = 30 + Math.random() * 20;
+            leaf.style.width = `${size}px`;
+            leaf.style.height = `${size}px`;
+            
+            const startLeft = Math.random() * 100;
+            leaf.style.left = startLeft + '%';
+            leaf.style.animationDuration = (12 - size/5) + Math.random() * 3 + 's';
+            
             document.body.appendChild(leaf);
             
-            // 动画结束后移除叶子元素
+            // 为每片叶子生成随机的最终角度
+            const finalRotation = Math.random() * 360;  // 0-360度之间的随机角度
+            
+            // 创建独特的动画名称
+            const animationName = `falling-${Date.now()}`;
+            
+            // 动态创建这片叶子的关键帧动画
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = `
+                @keyframes ${animationName} {
+                    0% {
+                        transform: translate(0, -10%) rotate(0deg) scale(1);
+                    }
+                    25% {
+                        transform: translate(20px, 20vh) rotate(90deg) scaleX(0.5);
+                    }
+                    37.5% {
+                        transform: translate(28px, 32vh) rotate(135deg) scale(1);
+                    }
+                    50% {
+                        transform: translate(35px, 45vh) rotate(180deg) scaleX(0.5);
+                    }
+                    62.5% {
+                        transform: translate(40px, 55vh) rotate(225deg) scale(1);
+                    }
+                    70% {
+                        transform: translate(50px, 70vh) rotate(270deg) scaleX(0.2);
+                    }
+                    75% {
+                        transform: translate(50px, 70vh) rotate(${finalRotation}deg) scaleX(0.2);
+                    }
+                    100% {
+                        transform: translate(75px, 70vh) rotate(${finalRotation}deg) scaleX(0.2);
+                    }
+                }
+            `;
+            document.head.appendChild(styleSheet);
+            
+            // 使用新的动画名称
+            leaf.style.animation = `${animationName} ${leaf.style.animationDuration} linear forwards`;
+
+            // 添加所有可能的事件监听器来追踪叶子的生命周期
             leaf.addEventListener('animationend', () => {
-                leaf.remove();
+                // 获取动画结束时叶子的位置和状态
+                const computedStyle = window.getComputedStyle(leaf);
+                const matrix = new DOMMatrix(computedStyle.transform);
+                const currentX = matrix.m41;  // 获取当前的 X 位置
+                const currentRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI); // 获取当前旋转角度
+                
+                // 为每片叶子添加随机时间偏移
+                const timeOffset = Math.random() * 10000;  // 0-10秒的随机偏移
+                
+                leaf.style.animation = 'none';
+                // 立即设置结束位置，保持当前角度
+                leaf.style.transform = `translate(${currentX}px, 70vh) rotate(${currentRotation}deg) scaleX(0.2)`;
+                
+                // 给一个很小的延迟后开始漂浮动画
+                setTimeout(() => {
+                    setInterval(() => {
+                        // 减小摆动幅度，让运动更加柔和
+                        const floatX = currentX + Math.sin((Date.now() + timeOffset) / 2000) * 5;
+                        const rotation = currentRotation + Math.sin((Date.now() + timeOffset) / 2000) * 5; // 于当前角度小幅度摆动
+                        leaf.style.transform = `translate(${floatX}px, 70vh) rotate(${rotation}deg) scaleX(0.2)`;
+                    }, 50);
+                }, 100);
             });
+
+            // 监听移除事件
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
+                        for (let node of mutation.removedNodes) {
+                            if (node === leaf) {
+                                console.log(`Leaf ${leaf.dataset.id} was removed by: `, new Error().stack);
+                            }
+                        }
+                    }
+                });
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
         }
 
         // 降低创建叶子的频率
-        setInterval(createLeaf, 2000);  // 改为每2秒创建一片叶子
+        setInterval(createLeaf, 2000);  // 每2秒创建一片叶子
         
-        // 减少初始叶子数量
-        for(let i = 0; i < 5; i++) {  // 改为初始创建5片叶子
+        // 初始叶子数量
+        for(let i = 0; i < 5; i++) {
             createLeaf();
         }
+
+        createUnderwaterObjects();
     </script>
 </body>
 </html>
