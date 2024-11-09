@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Fish</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f0f8ff;
+        }
+        .container {
+            background: linear-gradient(180deg, 
+                rgba(173, 216, 230, 0.3) 0%,
+                rgba(135, 206, 235, 0.4) 40%,
+                rgba(0, 119, 190, 0.5) 100%
+            );
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes swim {
+            0% { transform: translate(var(--start-x), var(--start-y)) rotateY(180deg); opacity: 0; }
+            2% { transform: translate(calc(var(--start-x) + 10%), var(--start-y)) rotateY(180deg); opacity: 1; }
+            20% { transform: translate(calc(20% + var(--offset-x)), calc(var(--start-y) + var(--offset-y))) rotateY(180deg); }
+            45% { transform: translate(calc(60% + var(--offset-x)), calc(var(--start-y) - var(--offset-y))) rotateY(180deg); }
+            70% { transform: translate(calc(20% + var(--offset-x)), var(--end-y)) rotateY(180deg); }
+            95% { transform: translate(calc(-40% + var(--offset-x)), calc(var(--end-y) + var(--offset-y))) rotateY(180deg); opacity: 1; }
+            100% { transform: translate(var(--start-x), var(--end-y)) rotateY(180deg); opacity: 0; }
+        }
+
+        .fish {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            --start-x: -50%;
+            --start-y: 0%;
+            --end-y: 0%;
+            --offset-x: 0%;
+            --offset-y: 0%;
+            --duration: 24s;
+            --delay: 0s;
+            animation: swim var(--duration) infinite ease-in-out var(--delay);
+        }
+
+        @keyframes finWave {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(15deg); }
+        }
+
+        @keyframes tailWave {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(0.7); }
+        }
+
+        [id^="tail"] {
+            transform-origin: 300px 100px;
+            animation: tailWave 1s infinite ease-in-out;
+        }
+
+        [id^="sideFin"] {
+            transform-origin: 160px 105px;
+            animation: finWave 2s infinite ease-in-out;
+        }
+
+        [id^="backFin"] {
+            transform-origin: 200px 70px;
+            animation: finWave 2s infinite ease-in-out;
+        }
+
+        [id^="bellyFin"] {
+            transform-origin: 180px 130px;
+            animation: finWave 2s infinite ease-in-out reverse;
+        }
+
+        @keyframes bubble {
+            0% {
+                transform: translateY(100%) translateX(-50%);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-20%) translateX(50%);
+                opacity: 0;
+            }
+        }
+
+        .bubble {
+            position: absolute;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.2));
+            border-radius: 50%;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .bubble:nth-child(1) { left: 10%; width: 20px; height: 20px; animation: bubble 8s infinite ease-in; }
+        .bubble:nth-child(2) { left: 30%; width: 15px; height: 15px; animation: bubble 10s infinite ease-in 1s; }
+        .bubble:nth-child(3) { left: 50%; width: 25px; height: 25px; animation: bubble 7s infinite ease-in 2s; }
+        .bubble:nth-child(4) { left: 70%; width: 18px; height: 18px; animation: bubble 9s infinite ease-in 3s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <svg width="100%" height="100%" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="fishGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#4a9fff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#6eb5ff;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="fishGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ff8e8e;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="fishGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#4ecdc4;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#7ee8e1;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="fishGradient4" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#ffd93d;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ffe566;stop-opacity:1" />
+                </linearGradient>
+                
+                <linearGradient id="finGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#6eb5ff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#b8dcff;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="finGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#ff8e8e;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ffb1b1;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="finGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#7ee8e1;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#a5f3ee;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="finGradient4" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#ffe566;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#fff0a3;stop-opacity:1" />
+                </linearGradient>
+
+                <radialGradient id="eyeGradient1">
+                    <stop offset="0%" style="stop-color:#000000"/>
+                    <stop offset="85%" style="stop-color:#000000"/>
+                    <stop offset="100%" style="stop-color:#4a9fff"/>
+                </radialGradient>
+                <radialGradient id="eyeGradient2">
+                    <stop offset="0%" style="stop-color:#000000"/>
+                    <stop offset="85%" style="stop-color:#000000"/>
+                    <stop offset="100%" style="stop-color:#4a9fff"/>
+                </radialGradient>
+                <radialGradient id="eyeGradient3">
+                    <stop offset="0%" style="stop-color:#000000"/>
+                    <stop offset="85%" style="stop-color:#000000"/>
+                    <stop offset="100%" style="stop-color:#4a9fff"/>
+                </radialGradient>
+                <radialGradient id="eyeGradient4">
+                    <stop offset="0%" style="stop-color:#000000"/>
+                    <stop offset="85%" style="stop-color:#000000"/>
+                    <stop offset="100%" style="stop-color:#4a9fff"/>
+                </radialGradient>
+
+                <g id="scaleTemplate">
+                    <path d="M270 70 Q272 73, 270 76 Q268 79, 270 82 Q272 85, 270 88 Q268 91, 270 94 Q272 97, 270 100 Q268 103, 270 106 Q272 109, 270 112 Q268 115, 270 118 Q272 121, 270 124 Q268 127, 270 130" />
+                    <path d="M260 70 Q262 73, 260 76 Q258 79, 260 82 Q262 85, 260 88 Q258 91, 260 94 Q262 97, 260 100 Q258 103, 260 106 Q262 109, 260 112 Q258 115, 260 118 Q262 121, 260 124 Q258 127, 260 130" />
+                    <path d="M250 70 Q252 73, 250 76 Q248 79, 250 82 Q252 85, 250 88 Q248 91, 250 94 Q252 97, 250 100 Q248 103, 250 106 Q252 109, 250 112 Q248 115, 250 118 Q252 121, 250 124 Q248 127, 250 130" />
+                    <path d="M240 70 Q242 73, 240 76 Q238 79, 240 82 Q242 85, 240 88 Q238 91, 240 94 Q242 97, 240 100 Q238 103, 240 106 Q242 109, 240 112 Q238 115, 240 118 Q242 121, 240 124 Q238 127, 240 130" />
+                    <path d="M230 70 Q232 73, 230 76 Q228 79, 230 82 Q232 85, 230 88 Q228 91, 230 94 Q232 97, 230 100 Q228 103, 230 106 Q232 109, 230 112 Q228 115, 230 118 Q232 121, 230 124 Q228 127, 230 130" />
+                    <path d="M220 70 Q222 73, 220 76 Q218 79, 220 82 Q222 85, 220 88 Q218 91, 220 94 Q222 97, 220 100 Q218 103, 220 106 Q222 109, 220 112 Q218 115, 220 118 Q222 121, 220 124 Q218 127, 220 130" />
+                    <path d="M210 70 Q212 73, 210 76 Q208 79, 210 82 Q212 85, 210 88 Q208 91, 210 94 Q212 97, 210 100 Q208 103, 210 106 Q212 109, 210 112 Q208 115, 210 118 Q212 121, 210 124 Q208 127, 210 130" />
+                    <path d="M200 70 Q202 73, 200 76 Q198 79, 200 82 Q202 85, 200 88 Q198 91, 200 94 Q202 97, 200 100 Q198 103, 200 106 Q202 109, 200 112 Q198 115, 200 118 Q202 121, 200 124 Q198 127, 200 130" />
+                    <path d="M190 70 Q192 73, 190 76 Q188 79, 190 82 Q192 85, 190 88 Q188 91, 190 94 Q192 97, 190 100 Q188 103, 190 106 Q192 109, 190 112 Q188 115, 190 118 Q192 121, 190 124 Q188 127, 190 130" />
+                    <path d="M180 70 Q182 73, 180 76 Q178 79, 180 82 Q182 85, 180 88 Q178 91, 180 94 Q182 97, 180 100 Q178 103, 180 106 Q182 109, 180 112 Q178 115, 180 118 Q182 121, 180 124 Q178 127, 180 130" />
+                    <path d="M170 70 Q172 73, 170 76 Q168 79, 170 82 Q172 85, 170 88 Q168 91, 170 94 Q172 97, 170 100 Q168 103, 170 106 Q172 109, 170 112 Q168 115, 170 118 Q172 121, 170 124 Q168 127, 170 130" />
+                    <path d="M160 70 Q162 73, 160 76 Q158 79, 160 82 Q162 85, 160 88 Q158 91, 160 94 Q162 97, 160 100 Q158 103, 160 106 Q162 109, 160 112 Q158 115, 160 118 Q162 121, 160 124 Q158 127, 160 130" />
+                    <path d="M150 70 Q152 73, 150 76 Q148 79, 150 82 Q152 85, 150 88 Q148 91, 150 94 Q152 97, 150 100 Q148 103, 150 106 Q152 109, 150 112 Q148 115, 150 118 Q152 121, 150 124 Q148 127, 150 130" />
+                </g>
+
+                <!-- Add new gradient for sand -->
+                <linearGradient id="sandGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#e6c588;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#d4b176;stop-opacity:1" />
+                </linearGradient>
+
+                <!-- Add pattern for repeating sand -->
+                <pattern id="sandPattern" x="0" y="0" width="1200" height="50" patternUnits="userSpaceOnUse">
+                    <path d="M0 0 
+                             C 300 -30, 500 30, 700 0 
+                             C 900 -30, 1100 30, 1200 0 
+                             L 1200 50 L 0 50 Z" 
+                          fill="url(#sandGradient)" />
+                </pattern>
+            </defs>
+
+            <!-- Replace existing sand path with infinite pattern -->
+            <rect x="-50%" y="750" width="200%" height="50" fill="url(#sandPattern)" />
+
+            <g class="fish1" transform="scale(1)">
+                <defs>
+                    <clipPath id="fishBody1">
+                        <path d="M300 100 C270 70, 150 70, 100 100 C150 130, 270 130, 300 100 Z" />
+                    </clipPath>
+                </defs>
+                
+                <path d="M300 100 C270 70, 150 70, 100 100 C150 130, 270 130, 300 100 Z" 
+                      fill="url(#fishGradient1)" />
+                
+                <g class="scales1" stroke="white" stroke-width="1" fill="none" opacity="0.3" clip-path="url(#fishBody1)">
+                    <use href="#scaleTemplate"/>
+                </g>
+                
+                <path id="tail1" d="M300 100 Q330 70, 360 85 L350 100 L360 115 Q330 130, 300 100" fill="url(#finGradient1)"/>
+                <path id="backFin1" d="M200 70 Q210 50, 230 65" fill="url(#finGradient1)"/>
+                <path id="bellyFin1" d="M180 130 Q190 150, 210 135" fill="url(#finGradient1)"/>
+                <path id="sideFin1" d="M160 105 Q140 120, 130 110" fill="url(#finGradient1)"/>
+                
+                <circle cx="125" cy="98" r="6" fill="white" stroke="#4a9fff" stroke-width="0.5"/>
+                <circle cx="125" cy="98" r="3" fill="url(#eyeGradient1)"/>
+                <circle cx="124" cy="97" r="1.2" fill="white"/>
+                <circle cx="126" cy="99" r="0.6" fill="white" opacity="0.8"/>
+            </g>
+
+            <g class="fish2" transform="translate(400,200) scale(0.8)">
+                <defs>
+                    <clipPath id="fishBody2">
+                        <path d="M300 100 C270 70, 150 70, 100 100 C150 130, 270 130, 300 100 Z" />
+                    </clipPath>
+                </defs>
+                
+                <path d="M300 100 C270 70, 150 70, 100 100 C150 130, 270 130, 300 100 Z" 
+                      fill="url(#fishGradient2)" />
+                
+                <g class="scales2" stroke="white" stroke-width="1" fill="none" opacity="0.3" clip-path="url(#fishBody2)">
+                    <use href="#scaleTemplate"/>
+                </g>
+                
+                <path id="tail2" d="M300 100 Q330 70, 360 85 L350 100 L360 115 Q330 130, 300 100" fill="url(#finGradient2)"/>
+                <path id="backFin2" d="M200 70 Q210 50, 230 65" fill="url(#finGradient2)"/>
+                <path id="bellyFin2" d="M180 130 Q190 150, 210 135" fill="url(#finGradient2)"/>
+                <path id="sideFin2" d="M160 105 Q140 120, 130 110" fill="url(#finGradient2)"/>
+                
+                <circle cx="125" cy="98" r="6" fill="white" stroke="#4a9fff" stroke-width="0.5"/>
+                <circle cx="125" cy="98" r="3" fill="url(#eyeGradient2)"/>
+                <circle cx="124" cy="97" r="1.2" fill="white"/>
+                <circle cx="126" cy="99" r="0.6" fill="white" opacity="0.8"/>
+            </g>
+
+            <g class="fish3" transform="translate(200,400) scale(1.2)">
+                <defs>
+                    <clipPath id="fishBody3">
+                        <path d="M300 100 C270 70, 150 70, 100 100 C150 130, 270 130, 300 100 Z" />
+                    </clipPath>
+                </defs>
+                
+                <path d="M300 100 C270 70, 150 70, 100 100 C150 130, 270 130, 300 100 Z" 
+                      fill="url(#fishGradient3)" />
+                
+                <g class="scales3" stroke="white" stroke-width="1" fill="none" opacity="0.3" clip-path="url(#fishBody3)">
+                    <use href="#scaleTemplate"/>
+                </g>
+                
+                <path id="tail3" d="M300 100 Q330 70, 360 85 L350 100 L360 115 Q330 130, 300 100" fill="url(#finGradient3)"/>
+                <path id="backFin3" d="M200 70 Q210 50, 230 65" fill="url(#finGradient3)"/>
+                <path id="bellyFin3" d="M180 130 Q190 150, 210 135" fill="url(#finGradient3)"/>
+                <path id="sideFin3" d="M160 105 Q140 120, 130 110" fill="url(#finGradient3)"/>
+                
+                <circle cx="125" cy="98" r="6" fill="white" stroke="#4a9fff" stroke-width="0.5"/>
+                <circle cx="125" cy="98" r="3" fill="url(#eyeGradient3)"/>
+                <circle cx="124" cy="97" r="1.2" fill="white"/>
+                <circle cx="126" cy="99" r="0.6" fill="white" opacity="0.8"/>
+            </g>
+
+            <g class="fish4" transform="translate(600,300) scale(0.9)">
+                <defs>
+                    <clipPath id="fishBody4">
+                        <path d="M300 100 C270 70, 150 70, 100 100 C150 130, 270 130, 300 100 Z" />
+                    </clipPath>
+                </defs>
+                
+                <path d="M300 100 C270 70, 150 70, 100 100 C150 130, 270 130, 300 100 Z" 
+                      fill="url(#fishGradient4)" />
+                
+                <g class="scales4" stroke="white" stroke-width="1" fill="none" opacity="0.3" clip-path="url(#fishBody4)">
+                    <use href="#scaleTemplate"/>
+                </g>
+                
+                <path id="tail4" d="M300 100 Q330 70, 360 85 L350 100 L360 115 Q330 130, 300 100" fill="url(#finGradient4)"/>
+                <path id="backFin4" d="M200 70 Q210 50, 230 65" fill="url(#finGradient4)"/>
+                <path id="bellyFin4" d="M180 130 Q190 150, 210 135" fill="url(#finGradient4)"/>
+                <path id="sideFin4" d="M160 105 Q140 120, 130 110" fill="url(#finGradient4)"/>
+                
+                <circle cx="125" cy="98" r="6" fill="white" stroke="#4a9fff" stroke-width="0.5"/>
+                <circle cx="125" cy="98" r="3" fill="url(#eyeGradient4)"/>
+                <circle cx="124" cy="97" r="1.2" fill="white"/>
+                <circle cx="126" cy="99" r="0.6" fill="white" opacity="0.8"/>
+            </g>
+        </svg>
+    </div>
+    <script>
+        function createFish(index) {
+            const fish = document.querySelector(`.fish${index}`).cloneNode(true);
+            fish.classList.remove(`fish${index}`);
+            fish.classList.add('fish');
+            return fish;
+        }
+
+        function setupFish(fish) {
+            fish.style.setProperty('--start-y', `${Math.random() * 60 - 30}%`);
+            fish.style.setProperty('--end-y', `${Math.random() * 60 - 30}%`);
+            fish.style.setProperty('--start-x', `${-45 - Math.random() * 20}%`);
+            fish.style.setProperty('--offset-x', `${Math.random() * 20 - 10}%`);
+            fish.style.setProperty('--offset-y', `${Math.random() * 20 - 10}%`);
+            fish.style.setProperty('--duration', `${15 + Math.random() * 15}s`);
+            fish.style.setProperty('--delay', '0s');
+            
+            const scale = 0.7 + Math.random() * 0.6;
+            fish.setAttribute('transform', `scale(${scale})`);
+        }
+
+        function initializeFishes() {
+            const container = document.querySelector('svg');
+            const fishCount = 5 + Math.floor(Math.random() * 6); // 5-10 fish
+
+            for (let i = 0; i < fishCount; i++) {
+                const fishType = Math.floor(Math.random() * 4) + 1;
+                const fish = createFish(fishType);
+                setupFish(fish);
+                
+                // 监听动画结束事件
+                fish.addEventListener('animationend', () => {
+                    setupFish(fish); // 重新设置鱼的参数
+                    // 触发重排以重启动画
+                    fish.style.animation = 'none';
+                    fish.offsetHeight; // 触发重排
+                    fish.style.animation = null;
+                });
+                
+                container.appendChild(fish);
+            }
+        }
+
+        initializeFishes();
+    </script>
+</body>
+</html>
