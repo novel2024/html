@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazing Rocket Animation</title>
+</head>
+<body>
+    <!-- 添加星空容器 -->
+    <div class="space-background">
+        <!-- 添加多个星星 -->
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
+        
+        <!-- 添加流星容器 -->
+        <div class="meteor-container">
+            <div class="meteor"></div>
+            <div class="meteor"></div>
+            <div class="meteor"></div>
+        </div>
+        
+        <div class="rocket-wrapper">
+            <svg viewBox="0 0 200 1000" class="rocket">
+                <!-- 添加火焰渐变定义 -->
+                <defs>
+                    <linearGradient id="flame-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color: rgba(0, 127, 255, 0.9)"/>  <!-- 亮蓝色，90%不透明 -->
+                        <stop offset="40%" style="stop-color: rgba(0, 102, 255, 0.7)"/> <!-- 中蓝色，70%不透明 -->
+                        <stop offset="80%" style="stop-color: rgba(26, 79, 255, 0.5)"/> <!-- 深蓝色，50%不透明 -->
+                        <stop offset="100%" style="stop-color: rgba(26, 79, 255, 0.2)"/> <!-- 深蓝色，20%不透明 -->
+                    </linearGradient>
+                </defs>
+
+                <!-- 整流罩（火箭头部）- 更长的圆锥形状 -->
+                <path d="M85 20 
+                         L85 5 
+                         C85 5, 100 -10, 115 5
+                         L115 20 
+                         Z" 
+                      fill="#ffffff"/>
+                
+                <!-- 整流罩和火箭主体的连接部分 -->
+                <rect x="83" y="20" width="34" height="10" fill="#ffffff" rx="2"/>
+                
+                <!-- 火箭主体 -->
+                <rect x="85" y="30" width="30" height="270" fill="#ffffff" rx="2"/>
+                
+                <!-- 添加更大的文字 -->
+                <text x="100" y="160" 
+                      text-anchor="middle" 
+                      fill="#333333" 
+                      style="font-size: 14px; font-weight: bold; writing-mode: vertical-rl; letter-spacing: 10px;">
+                    夜郎航天
+                </text>
+                
+                <!-- 翅膀 -->
+                <path d="M85 250 L70 290 L85 280 Z" fill="#ffffff"/>
+                <path d="M115 250 L130 290 L115 280 Z" fill="#ffffff"/>
+                
+                <!-- 火焰 - 增加长度到之前的两倍 -->
+                <g class="flame">
+                    <!-- 内层火焰 -->
+                    <path d="M93 300 Q100 900 107 300" fill="url(#flame-gradient)" opacity="0.9">
+                        <animate attributeName="d" 
+                                 dur="0.3s" 
+                                 repeatCount="indefinite"
+                                 values="M93 300 Q100 900 107 300;
+                                         M93 300 Q100 850 107 300;
+                                         M93 300 Q100 900 107 300"/>
+                    </path>
+                    <!-- 外层火焰 -->
+                    <path d="M90 300 Q100 880 110 300" fill="url(#flame-gradient)" opacity="0.6">
+                        <animate attributeName="d" 
+                                 dur="0.4s" 
+                                 repeatCount="indefinite"
+                                 values="M90 300 Q100 880 110 300;
+                                         M90 300 Q100 830 110 300;
+                                         M90 300 Q100 880 110 300"/>
+                    </path>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .space-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #1b2735 0%, #090a0f 50%, #1b2735 100%);
+        }
+
+        .rocket-wrapper {
+            /* 修改现有的 rocket-wrapper 样式 */
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: transparent;
+            padding: 20px;
+        }
+
+        .rocket {
+            width: 200px;
+            height: 1000px;
+            animation: rocketFloat 2s ease-in-out infinite;
+        }
+
+        @keyframes rocketFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .flame {
+            animation: flameFlicker 0.1s ease-in-out infinite;
+        }
+
+        @keyframes flameFlicker {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        /* 添加星星动画样式 */
+        .stars, .stars2, .stars3 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: none;
+        }
+
+        .stars {
+            background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(2px 2px at 50px 160px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: stars-animation 200s linear infinite;
+        }
+
+        .stars2 {
+            background-image: radial-gradient(3px 3px at 50px 60px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(3px 3px at 100px 150px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(3px 3px at 150px 100px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 300px 300px;
+            animation: stars-animation 150s linear infinite;
+        }
+
+        .stars3 {
+            background-image: radial-gradient(1px 1px at 10px 20px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(1px 1px at 150px 150px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(1px 1px at 70px 90px, #fff, rgba(0,0,0,0)),
+                            radial-gradient(1px 1px at 130px 40px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: stars-animation 100s linear infinite;
+        }
+
+        @keyframes stars-animation {
+            from {
+                transform: translateY(0px);
+            }
+            to {
+                transform: translateY(-2000px);
+            }
+        }
+
+        /* 修改流星效果 */
+        .space-background::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 2px;
+            height: 50px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #ffffff);
+            animation: meteor 2s linear infinite;
+        }
+
+        @keyframes meteor {
+            0% {
+                transform: rotate(225deg) translateX(-100%);
+                opacity: 1;
+                right: 0;
+                top: 0;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(225deg) translateX(200vh);
+                opacity: 0;
+                right: 0;
+                top: 0;
+            }
+        }
+
+        /* 新的流星样式 */
+        .meteor-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .meteor {
+            position: absolute;
+            right: -100px;
+            width: 300px;
+            height: 1px;
+            background: linear-gradient(to right,
+                rgba(255, 255, 255, 0.8),
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent
+            );
+            transform: rotate(225deg);
+            animation: meteor-fall 3s linear infinite;
+        }
+
+        @keyframes meteor-fall {
+            0% {
+                transform: rotate(225deg) translateX(0);
+                opacity: 1;
+            }
+            
+            20% {
+                opacity: 1;
+            }
+            
+            60% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: rotate(225deg) translateX(-200vw);
+                opacity: 0;
+            }
+        }
+
+        /* 调整每个流星的起始位置和延迟，让它们立即开始 */
+        .meteor:nth-child(1) {
+            animation-delay: -2s;  /* 负值延迟，使动画立即开始 */
+            top: 20%;
+            right: 30%;
+        }
+
+        .meteor:nth-child(2) {
+            animation-delay: -0.8s;  /* 负值延迟 */
+            top: 35%;
+            right: 20%;
+        }
+
+        .meteor:nth-child(3) {
+            animation-delay: -1.6s;  /* 负值延迟 */
+            top: 50%;
+            right: 10%;
+        }
+    </style>
+</body>
+</html>
