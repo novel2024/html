@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cloud Animation</title>
+    <style>
+        .landscape {
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(#7eb9e0 0%, #b5d8f0 60%, #90b77d 60%);
+            position: relative;
+            overflow: hidden;
+            animation: skyChange 2s forwards;
+            animation-delay: 10s;
+        }
+
+        .sun {
+            width: 80px;
+            height: 80px;
+            background: #ffd633;
+            border-radius: 50%;
+            position: absolute;
+            top: 60px;
+            right: 100px;
+            box-shadow: 0 0 60px #ffeb99;
+            animation: sunFade 8s forwards;
+            animation-delay: 10s;
+        }
+
+        .mountain-back {
+            width: 100%;
+            height: 300px;
+            background: #546a7b;
+            position: absolute;
+            bottom: 200px;
+            clip-path: path('M 0 300 C 100 280, 200 150, 400 300 C 500 280, 600 30, 800 300 C 1000 250, 1200 180, 1400 300 C 1600 280, 1800 100, 1920 300 L 0 300');
+        }
+
+        .mountain-mid {
+            width: 100%;
+            height: 350px;
+            background: #3d4c59;
+            position: absolute;
+            bottom: 150px;
+            clip-path: path('M 0 350 C 200 320, 300 200, 500 350 C 700 300, 800 50, 1000 350 C 1200 320, 1400 150, 1600 350 C 1700 320, 1850 250, 1920 350 L 0 350');
+        }
+
+        .mountain-front {
+            width: 100%;
+            height: 400px;
+            background: #2b363f;
+            position: absolute;
+            bottom: 100px;
+            clip-path: path('M 0 400 C 150 380, 250 100, 500 400 C 600 380, 700 200, 900 400 C 1100 350, 1300 50, 1600 400 C 1700 380, 1850 300, 1920 400 L 0 400');
+        }
+
+        .clouds {
+            position: absolute;
+            opacity: 0.9;
+            z-index: 100;
+            transition: filter 2s ease;
+        }
+
+        .clouds.dark {
+            filter: brightness(0.8) saturate(0.9);
+        }
+
+        .cloud {
+            position: relative;
+            width: 180px;
+            height: 80px;
+        }
+
+        .cloud-circle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            transition: background-color 2s ease;
+        }
+
+        .clouds.dark .cloud-circle {
+            background: #808080;
+        }
+
+        .cloud-circle-1 {
+            width: 75px;
+            height: 75px;
+            left: 15px;
+            bottom: 0;
+        }
+
+        .cloud-circle-2 {
+            width: 95px;
+            height: 95px;
+            left: 45px;
+            bottom: 0;
+        }
+
+        .cloud-circle-3 {
+            width: 75px;
+            height: 75px;
+            right: 15px;
+            bottom: 0;
+        }
+
+        .cloud-shadow {
+            position: absolute;
+            width: 180px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            bottom: -25px;
+            filter: blur(5px);
+            transform: scale(0.7);
+        }
+
+        .trees {
+            position: absolute;
+            bottom: 50px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .tree {
+            position: absolute;
+        }
+
+        .tree::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: #4d2b1b;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tree-bottom {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 70px solid #1b4a2c;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tree-middle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 60px solid #205c36;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tree-top {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 50px solid #276840;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tree:nth-child(1) { left: 10%; transform: scale(0.7); }
+        .tree:nth-child(2) { left: 20%; transform: scale(1.2); }
+        .tree:nth-child(3) { left: 35%; transform: scale(0.9); }
+        .tree:nth-child(4) { left: 75%; transform: scale(1.1); }
+        .tree:nth-child(5) { left: 85%; transform: scale(0.8); }
+
+        @keyframes skyChange {
+            0% {
+                background: linear-gradient(#7eb9e0 0%, #b5d8f0 60%, #90b77d 60%);
+            }
+            50% {
+                background: linear-gradient(#4a6670 0%, #718693 60%, #728465 60%);
+            }
+            100% {
+                background: linear-gradient(#7eb9e0 0%, #b5d8f0 60%, #90b77d 60%);
+            }
+        }
+
+        @keyframes sunFade {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            50% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rain {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .drop {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(transparent, #fff);
+            animation: rain 0.7s linear infinite;
+            animation-delay: calc(10s + var(--delay, 0s));
+            opacity: 0;
+        }
+
+        @keyframes rain {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            from { transform: translateX(-200px); }
+            to { transform: translateX(calc(100vw + 200px)); }
+        }
+
+        .cloud-label {
+            position: absolute;
+            color: #333;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #cloud-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .rainbow {
+            position: absolute;
+            width: 90%;
+            height: 600px;
+            left: 5%;
+            top: -100px;
+            opacity: 0;
+            z-index: 1;
+            animation: rainbowAppear 5s forwards;
+            animation-delay: 20s;
+            filter: blur(1px);
+            overflow: hidden;
+        }
+
+        .rainbow::before,
+        .rainbow::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50% 50% 0 0;
+            mix-blend-mode: screen;
+            transform-origin: center bottom;
+        }
+
+        .rainbow::before {
+            background: radial-gradient(
+                circle at 50% 100%,
+                transparent 49%,
+                rgba(255, 0, 0, 0.2) 50%,        /* 赤 red */
+                rgba(255, 127, 0, 0.2) 50.5%,    /* 橙 orange */
+                rgba(255, 255, 0, 0.2) 51%,      /* 黄 yellow */
+                rgba(0, 255, 0, 0.2) 51.5%,      /* 绿 green */
+                rgba(0, 0, 255, 0.2) 52%,        /* 蓝 blue */
+                rgba(75, 0, 130, 0.2) 52.5%,     /* 靛 indigo */
+                rgba(148, 0, 211, 0.2) 53%,      /* 紫 violet */
+                transparent 53.5%
+            );
+            transform: scale(0.98);
+        }
+
+        .rainbow::after {
+            background: radial-gradient(
+                circle at 50% 100%,
+                transparent 49%,
+                rgba(255, 0, 0, 0.1) 50%,        /* 赤 */
+                rgba(255, 127, 0, 0.1) 50.5%,    /* 橙 */
+                rgba(255, 255, 0, 0.1) 51%,      /* 黄 */
+                rgba(0, 255, 0, 0.1) 51.5%,      /* 绿 */
+                rgba(0, 0, 255, 0.1) 52%,        /* 蓝 */
+                rgba(75, 0, 130, 0.1) 52.5%,     /* 靛 */
+                rgba(148, 0, 211, 0.1) 53%,      /* 紫 */
+                transparent 53.5%
+            );
+            transform: scale(1.02);
+        }
+
+        @keyframes rainbowAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="landscape">
+        <div class="sun"></div>
+        <div class="rainbow"></div>
+        <div class="rain">
+            <div class="drop" style="left: 10%; --delay: 0s;"></div>
+            <div class="drop" style="left: 20%; --delay: 0.2s;"></div>
+            <div class="drop" style="left: 30%; --delay: 0.4s;"></div>
+            <div class="drop" style="left: 40%; --delay: 0.1s;"></div>
+            <div class="drop" style="left: 50%; --delay: 0.3s;"></div>
+            <div class="drop" style="left: 60%; --delay: 0.5s;"></div>
+            <div class="drop" style="left: 70%; --delay: 0.2s;"></div>
+            <div class="drop" style="left: 80%; --delay: 0.4s;"></div>
+            <div class="drop" style="left: 90%; --delay: 0.1s;"></div>
+        </div>
+        <div id="cloud-container"></div>
+        <div class="mountain-back"></div>
+        <div class="mountain-mid"></div>
+        <div class="mountain-front"></div>
+        <div class="trees">
+            <div class="tree">
+                <div class="tree-bottom"></div>
+                <div class="tree-middle"></div>
+                <div class="tree-top"></div>
+            </div>
+            <div class="tree">
+                <div class="tree-bottom"></div>
+                <div class="tree-middle"></div>
+                <div class="tree-top"></div>
+            </div>
+            <div class="tree">
+                <div class="tree-bottom"></div>
+                <div class="tree-middle"></div>
+                <div class="tree-top"></div>
+            </div>
+            <div class="tree">
+                <div class="tree-bottom"></div>
+                <div class="tree-middle"></div>
+                <div class="tree-top"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const MAX_CLOUDS = 5; // Changed from 10 to 5 to reduce cloud count by half
+
+        function createCloud() {
+            if (document.querySelectorAll('.cloud').length >= MAX_CLOUDS) {
+                return;
+            }
+            const cloud = document.createElement('div');
+            
+            // 检查是否已经过了10秒
+            const isAfterRain = Date.now() - pageLoadTime > 10000;
+            cloud.className = isAfterRain ? 'clouds dark' : 'clouds';
+            
+            cloud.innerHTML = `
+                <div class="cloud">
+                    <div class="cloud-circle cloud-circle-1"></div>
+                    <div class="cloud-circle cloud-circle-2"></div>
+                    <div class="cloud-circle cloud-circle-3"></div>
+                    <div class="cloud-shadow"></div>
+                </div>
+            `;
+            
+            const top = Math.random() * 200 + 50;
+            const scale = Math.random() * 0.5 + 0.8;
+            const duration = Math.random() * 10 + 25;
+            
+            cloud.style.cssText = `
+                top: ${top}px;
+                transform: scale(${scale});
+                animation: float ${duration}s linear infinite;
+            `;
+            
+            cloud.addEventListener('animationend', () => {
+                cloud.remove();
+            });
+            
+            return cloud;
+        }
+
+        // 添加这个函数来处理所有云的变暗
+        function darkAllClouds() {
+            const clouds = document.querySelectorAll('.clouds');
+            clouds.forEach(cloud => cloud.classList.add('dark'));
+        }
+
+        const pageLoadTime = Date.now();
+
+        // 设置定时器在10秒后将所有云变暗
+        setTimeout(darkAllClouds, 10000);
+
+        function addCloud() {
+            const container = document.getElementById('cloud-container');
+            container.appendChild(createCloud());
+            
+            const nextCloudDelay = Math.random() * 3000 + 2000; // 2-5秒之间
+            setTimeout(addCloud, nextCloudDelay);
+        }
+
+        addCloud();
+
+        // Modify sky and clouds timing
+        setTimeout(() => {
+            darkAllClouds();
+            document.querySelector('.landscape').style.animationDuration = '20s';
+            document.querySelector('.sun').style.animationDuration = '20s';
+        }, 10000);
+
+        // Restore bright clouds after 20 seconds
+        setTimeout(() => {
+            const clouds = document.querySelectorAll('.clouds');
+            clouds.forEach(cloud => cloud.classList.remove('dark'));
+        }, 20000);
+    </script>
+</body>
+</html>
